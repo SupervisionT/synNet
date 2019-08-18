@@ -17,7 +17,7 @@ function makeRequest(dataSlice) {
       console.log('lang:', lngDetector.detect(elem, 1))
       var tk = token.get(elem)
       const tl = (lengo === 'en') ? 'ar' : 'en';
-      // console.log('tk', tk, elem);
+      console.log('tl', lengo, tl);
       var url = `https://translate.google.com/translate_a/single?client=webapp&sl=${lengo}&tl=${tl}&hl=en&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&otf=1&ssel=5&tsel=5&kc=5&tk=` + tk.value + '&q=' + encodeURIComponent(elem);
       var headers = {
         'User-Agent': fakeUa()
@@ -102,7 +102,7 @@ function getSyn(data, response, nameWExt, language) {
     l = fileData.length;
     c = 1;
     counter = 0;
-    lengo = language;
+    lengo = language[0];
     myFunction();
 }
 
