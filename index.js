@@ -42,48 +42,48 @@ http.createServer(function(req, res) {
     //     }
     // })
 
-    form.on("error", function(error){
-        console.log(error);
-    })
+    // form.on("error", function(error){
+    //     console.log(error);
+    // })
 
     // form.parse(req);
-    form.parse(req, function(err, fields, files) {
-      console.log(files)
-      let path = files.upload['0'].path;
-      const { data } = xlsx.parse(path)[0];
-      console.log(data);
-    })
+    // form.parse(req, function(err, fields, files) {
+    //   console.log(files)
+    //   let path = files.upload['0'].path;
+    //   const { data } = xlsx.parse(path)[0];
+    //   console.log(data);
+    // })
 
 
     // const { file: { path } } = req;
     // const { data } = xlsx.parse(path)[0];
     // data.splice(0, 1);
 
-    // form.parse(req, function(err, fields, files) {
-    //   let { path, type, name } = files.upload
-    //   console.log('path, type', fields, files);
-    //   if (fileTypes.includes(type.split('/')[1]) && fields.lang !== '0'){
-    //     if (type.split('/')[1] === fileTypes[0]){
-    //       fs.readFile(path, 'utf8', function (err, data) {
-    //         var dataArray = data.split(/\r?\n/);  //Be careful if you are in a \r\n world...
-    //         // Your array contains ['ID', 'D11', ... ]
-    //         gogle.getSyn(dataArray, res, name, fields.lang);
-    //       })
-    //     } else {
-    //       const workSheetsFromFile = xlsx.parse(path);
-    //       var flattened = workSheetsFromFile[0].data.reduce((e, a) => e.concat(a),[]);
-    //       gogle.getSyn(flattened, res, name, fields.lang);
-    //       // console.log(`size = [${workSheetsFromFile[0].data.length}, ${workSheetsFromFile[0].data[0].length}]`);
-    //       // console.log('form.uploadDir', path, files.upload);
-    //     }
-    //   } else {
-    //     res.writeHead(400, {'content-type': 'text/plain'});
-    //     (fields.lang == '0') ?
-    //     res.write('You must select language') :
-    //     res.write('You must select file or uploaded file is not compatible');
-    //     res.end();
-    //   }
-    // });
+    form.parse(req, function(err, fields, files) {
+      let { path, type, name } = files.upload
+      console.log('path, type', fields, files);
+      if (fileTypes.includes(type.split('/')[1]) && fields.lang !== '0'){
+        if (type.split('/')[1] === fileTypes[0]){
+          fs.readFile(path, 'utf8', function (err, data) {
+            var dataArray = data.split(/\r?\n/);  //Be careful if you are in a \r\n world...
+            // Your array contains ['ID', 'D11', ... ]
+            gogle.getSyn(dataArray, res, name, fields.lang);
+          })
+        } else {
+          const workSheetsFromFile = xlsx.parse(path);
+          var flattened = workSheetsFromFile[0].data.reduce((e, a) => e.concat(a),[]);
+          gogle.getSyn(flattened, res, name, fields.lang);
+          // console.log(`size = [${workSheetsFromFile[0].data.length}, ${workSheetsFromFile[0].data[0].length}]`);
+          // console.log('form.uploadDir', path, files.upload);
+        }
+      } else {
+        res.writeHead(400, {'content-type': 'text/plain'});
+        (fields.lang == '0') ?
+        res.write('You must select language') :
+        res.write('You must select file or uploaded file is not compatible');
+        res.end();
+      }
+    });
 
     return
   }
