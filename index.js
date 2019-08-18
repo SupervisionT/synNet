@@ -57,4 +57,4 @@ http.createServer(function(req, res) {
     '<input type="submit" value="Upload">'+
     '</form>'
   );
-}).listen(8080);
+}).listen(process.env.PORT || 8080);
