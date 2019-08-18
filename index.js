@@ -48,7 +48,7 @@ http.createServer(function(req, res) {
 
     // form.parse(req);
     form.parse(req, function(err, fields, files) {
-      console.log(files.upload['0'].path)
+      console.log(files)
       let path = files.upload['0'].path;
       const { data } = xlsx.parse(path)[0];
       console.log(data);
@@ -85,7 +85,7 @@ http.createServer(function(req, res) {
     //   }
     // });
 
-    return res.end();
+    return
   }
 
   // show a file upload form
