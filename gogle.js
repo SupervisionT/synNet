@@ -38,12 +38,12 @@ function makeRequest(dataSlice) {
   
           // logger.write(JSON.stringify({'key': key, 'data': kk}))
           // logger.write(",")
-          fs.appendFile('mynewfile1.txt', `${kk},`, function (err) {
+          fs.appendFile(`${name}.txt`, `${kk},`, function (err) {
             if (err) throw err;
             console.log(c, 'Saved!');
             if(c >= l) {
             console.log('finish', counter);
-            var filePath = path.join(__dirname, 'mynewfile1.txt');
+            var filePath = path.join(__dirname, `${name}.txt`);
             var stat = fs.statSync(filePath);
             res.writeHead(200, {
                 'Content-Type': 'application/octet-stream',
@@ -54,6 +54,12 @@ function makeRequest(dataSlice) {
             var readStream = fs.createReadStream(filePath);
             // We replaced all the event handlers with a simple call to readStream.pipe()
             readStream.pipe(res);
+            try {
+              fs.unlinkSync(filePath)
+              //file removed
+            } catch(err) {
+              console.error(err)
+            }
           } else {
             ++c;
           }
