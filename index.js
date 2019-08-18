@@ -1,11 +1,9 @@
-var formidable = require('formidable'),
-    http = require('http'),
-    util = require('util'),
+var http = require('http'),
     xlsx =require('node-xlsx'),
     gogle =require('./gogle'),
     fs = require('fs'),
     multiparty = require("multiparty"),
-    fileTypes = ['csv', 'vnd.ms-excel', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    fileTypes = ['csv', 'xls', 'xlsx'];
 
 
 http.createServer(function(req, res) {
@@ -60,19 +58,19 @@ http.createServer(function(req, res) {
     // data.splice(0, 1);
 
     form.parse(req, function(err, fields, files) {
-      let { path, type, name } = files.upload
-      console.log('path, type', fields, files);
-      if (fileTypes.includes(type.split('/')[1]) && fields.lang !== '0'){
-        if (type.split('/')[1] === fileTypes[0]){
+      let { path, originalFilename } = files.upload['0'];
+      console.log('path, type', path, originalFilename, originalFilename.split('.')[1]);
+      if (fileTypes.includes(originalFilename.split('.')[1]) && fields.lang !== '0'){
+        if (originalFilename.split('.')[1] === fileTypes[0]){
           fs.readFile(path, 'utf8', function (err, data) {
             var dataArray = data.split(/\r?\n/);  //Be careful if you are in a \r\n world...
             // Your array contains ['ID', 'D11', ... ]
-            gogle.getSyn(dataArray, res, name, fields.lang);
+            gogle.getSyn(dataArray, res, originalFilename, fields.lang);
           })
         } else {
           const workSheetsFromFile = xlsx.parse(path);
           var flattened = workSheetsFromFile[0].data.reduce((e, a) => e.concat(a),[]);
-          gogle.getSyn(flattened, res, name, fields.lang);
+          gogle.getSyn(flattened, res, originalFilename, fields.lang);
           // console.log(`size = [${workSheetsFromFile[0].data.length}, ${workSheetsFromFile[0].data[0].length}]`);
           // console.log('form.uploadDir', path, files.upload);
         }
