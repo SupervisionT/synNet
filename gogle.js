@@ -11,13 +11,21 @@ const lngDetector = new LanguageDetect();
 //   flags: 'a' // 'a' means appending (old data will be preserved)
 // })
 
+const groupBy = keys => array =>
+  array.reduce((objectsByKeyValue, obj) => {
+    const value = keys.map(key => obj[key]).join('-');
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {});
+const groupByKSP = groupBy(['key', 'syn', 'pos']);
+
+
 function makeRequest(dataSlice) {
     // do your request here
     dataSlice.map(function(elem, i) {
-      console.log('lang:', lngDetector.detect(elem, 1))
       var tk = token.get(elem)
       const tl = (lengo === 'en') ? 'ar' : 'en';
-      console.log('tl', lengo, tl);
+      // console.log('tl', lengo, tl);
       var url = `https://translate.google.com/translate_a/single?client=webapp&sl=${lengo}&tl=${tl}&hl=en&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&otf=1&ssel=5&tsel=5&kc=5&tk=` + tk.value + '&q=' + encodeURIComponent(elem);
       var headers = {
         'User-Agent': fakeUa()
@@ -27,18 +35,33 @@ function makeRequest(dataSlice) {
         var key = decodeURIComponent(r.req.path.split('&q=')[1]);
 
         (syn[1]) ? console.log('ok') : console.log('NOT ok: ', key)
-        let access = (syn[1]) ? syn[1]["0"][2] : false;
-        console.log('access', syn, key, access)
-        // console.log('access length', Object.keys(access).length)
+        let access = (syn[1]) ? true : false;
         if (access) {
-          const kk = Object.keys(access).reduce((acc, arr) => (
-            acc.concat((access[arr][3] + ":" + access[arr][1].join(", " + access[arr][3] + ":")).split(','))
-          ), []).map(e => e.split(':'))
-          // console.log('Object.keys: ', syn.length);
+          const shape = Object.keys(syn[1]).reduce((acc, arr) => {
+            let pos = syn[1][arr][2];
+            return acc.concat(Object.keys(pos).reduce((acc, word) => {
+                return acc.concat(pos[word][1].reduce((acc, e) => (
+                  acc.concat({key:key, syn:e, prob:(pos[word][3])?pos[word][3]:0.0000010101011, pos:syn[1][arr]["0"]})
+                  ),[]))
+                }
+                , [])
+                )}
+                , [])
+          let groups =  groupByKSP(shape);
+          let uniqeSum = Object.values(groups).reduce((acc, r, idx)=> {
+            return acc.concat(Object.values(r.reduce((acr, e, i) => {
+              if (i == 0) { 
+                acr = e  
+              } else {
+                acr.prob += e.prob ;  
+              }
+              return acr
+            }
+            , {})) + ' \n')
+          }, '')
+          // console.log('uniqeSum: ', uniqeSum);
   
-          // logger.write(JSON.stringify({'key': key, 'data': kk}))
-          // logger.write(",")
-          fs.appendFile(`${name}.txt`, `${kk},`, function (err) {
+          fs.appendFile(`${name}.txt`, `${uniqeSum}`, function (err) {
             if (err) throw err;
             console.log(c, 'Saved!');
             if(c >= l) {
@@ -92,13 +115,13 @@ var myFunction = () => {
 var fileData,
 l, res, name, c, counter, lengo;
 
-
-
 function getSyn(data, response, nameWExt, language) {
     fileData = data;
+    // console.log(lngDetector.getLanguages())
+    console.log('Lang:', fileData.reduce((a, e)=>a.concat(e + ' '),''), lngDetector.detect(fileData.reduce((a, e)=>a.concat(e + ' '),'')))
     res = response;
     name = nameWExt.split('.')[0];
-    console.log('resp', fileData);
+    // console.log('resp', fileData);
     l = fileData.length;
     c = 1;
     counter = 0;
