@@ -89,7 +89,7 @@ function makeRequest(dataSlice) {
           });
         } else {
           ++c;
-          if(c >= l) {
+          if(c > l) {
             console.log('finish', counter);
             var filePath = path.join(__dirname, `${name}.txt`);
             if (fs.existsSync(filePath)){
@@ -109,7 +109,7 @@ function makeRequest(dataSlice) {
                 console.error(err)
               }  
             } else {
-              res.writeHead(302, {'Location': '/'});
+              res.writeHead(400);
               res.statusMessage = 'Not Accepted watch your language!';
               res.end();
             }
