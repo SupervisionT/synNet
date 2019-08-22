@@ -89,6 +89,31 @@ function makeRequest(dataSlice) {
           });
         } else {
           ++c;
+          if(c >= l) {
+            console.log('finish', counter);
+            var filePath = path.join(__dirname, `${name}.txt`);
+            if (fs.existsSync(filePath)){
+              var stat = fs.statSync(filePath);
+              res.writeHead(200, {
+                  'Content-Type': 'application/octet-stream',
+                  "Content-Disposition": `attachment; filename="${name}-synNet.txt"`,
+                  'Content-Length': stat.size
+              });
+              var readStream = fs.createReadStream(filePath);
+              // We replaced all the event handlers with a simple call to readStream.pipe()
+              readStream.pipe(res);
+              try {
+                fs.unlinkSync(filePath)
+                //file removed
+              } catch(err) {
+                console.error(err)
+              }  
+            } else {
+              res.writeHead(302, {'Location': '/'});
+              res.statusMessage = 'Not Accepted watch your language!';
+              res.end();
+            }
+          }
         }
       });
     })
