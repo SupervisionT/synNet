@@ -109,8 +109,8 @@ function makeRequest(dataSlice) {
                 console.error(err)
               }  
             } else {
-              res.writeHead(400);
-              res.statusMessage = 'Not Accepted watch your language!';
+              res.writeHead(400, {'content-type': 'text/plain'});
+              res.write('The language you selected is not matching your file language, please check and try again')
               res.end();
             }
           }

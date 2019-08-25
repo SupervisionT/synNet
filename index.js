@@ -87,17 +87,21 @@ http.createServer(function(req, res) {
   }
 
   // show a file upload form
+  // var html = fs.readFileSync('./src/front/index.html', 'utf8')
   res.writeHead(200, {'content-type': 'text/html'});
-  res.end(
-    '<form action="/upload" enctype="multipart/form-data" method="post">'+
-    '<select class="example" name="lang">'+
-      '<option name="" value="0" selected>Select Language</option>'+
-      '<option name="en" value="en">English</option>'+
-      '<option name="ar" value="ar">Arabic</option>'+
-      '<option name="fr" value="fr">France</option>'+
-    '</select><br>'+
-    '<input type="file" name="upload"><br>'+
-    '<input type="submit" value="Upload">'+
-    '</form>'
-  );
+  var readSream = fs.createReadStream('./src/front/index.html','utf8')
+  readSream.pipe(res);
+
+  // res.end(
+  //   '<form action="/upload" enctype="multipart/form-data" method="post">'+
+  //   '<select class="example" name="lang">'+
+  //     '<option name="" value="0" selected>Select Language</option>'+
+  //     '<option name="en" value="en">English</option>'+
+  //     '<option name="ar" value="ar">Arabic</option>'+
+  //     '<option name="fr" value="fr">France</option>'+
+  //   '</select><br>'+
+  //   '<input type="file" name="upload" accept=".xls,.xlsx,.csv"><br>'+
+  //   '<input type="submit" value="Upload">'+
+  //   '</form>'
+  // );
 }).listen(process.env.PORT || 8080);
