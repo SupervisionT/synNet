@@ -3,6 +3,7 @@ var http = require('http'),
     gogle =require('./gogle'),
     fs = require('fs'),
     multiparty = require("multiparty"),
+    utils = require('./utils.js'),
     fileTypes = ['csv', 'xls', 'xlsx'];
 
 
@@ -36,20 +37,23 @@ http.createServer(function(req, res) {
     });
 
     return
-  } else if (req.url.split('?')[0] == '/contact') {
-    var form = new multiparty.Form();
-    let msg;
-    form.parse(req, function(err, fields, files) {
-      msg = fields;
-      console.log('fields',fields)
+  } else if (req.url == '/contact') {
+    utils.parseBody(req,function(err,user_data){
+      console.log('contact msg', user_data)
+      res.writeHead(301,
+        {Location: '/#Contact'}
+      );
+      res.end();
     })
+    
+    // var form = new multiparty.Form();
+    // let msg;
+    // form.parse(req, function(err, fields, files) {
+    //   msg = fields;
+    //   console.log('fields',fields)
+    // })
     // const param = req.url.split('?')[1];
     // const msg = param.split('&').reduce((a, e) => (a.concat({[e.split('=')[0]] : decodeURIComponent(e.split('=')[1])})), []);
-    console.log('contact msg', msg)
-    res.writeHead(301,
-      {Location: '/#Contact'}
-    );
-    res.end();
   }
 
   // show a file upload form
