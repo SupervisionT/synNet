@@ -37,7 +37,7 @@ http.createServer(function(req, res) {
     });
 
     return
-  } else if (req.url == '/contact') {
+  } else if (req.url == '/contact' && req.method.toLowerCase() == 'post') {
     utils.parseBody(req,function(err,user_data){
       console.log('contact msg', user_data)
       res.writeHead(301,
