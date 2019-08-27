@@ -20,12 +20,12 @@ http.createServer(function(req, res) {
           fs.readFile(path, 'utf8', function (err, data) {
             var dataArray = data.split(/\r?\n/);  //Be careful if you are in a \r\n world...
             // Your array contains ['ID', 'D11', ... ]
-            gogle.getSyn(dataArray, res, originalFilename, fields.lang);
+            gogle.getSyn(dataArray.slice(0, 50), res, originalFilename, fields.lang);
           })
         } else {
           const workSheetsFromFile = xlsx.parse(path);
           var flattened = workSheetsFromFile[0].data.reduce((e, a) => e.concat(a),[]);
-          gogle.getSyn(flattened, res, originalFilename, fields.lang);
+          gogle.getSyn(flattened.slice(0, 50), res, originalFilename, fields.lang);
         }
       } else {
         res.writeHead(400, {'content-type': 'text/plain'});

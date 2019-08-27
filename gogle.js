@@ -61,16 +61,16 @@ function makeRequest(dataSlice) {
           }, '')
           // console.log('uniqeSum: ', uniqeSum);
   
-          fs.appendFile(`${name}.txt`, `${uniqeSum}`, function (err) {
+          fs.appendFile(`${name}.csv`, `${uniqeSum}`, function (err) {
             if (err) throw err;
             console.log(c, 'Saved!');
             if(c >= l) {
             console.log('finish', counter);
-            var filePath = path.join(__dirname, `${name}.txt`);
+            var filePath = path.join(__dirname, `${name}.csv`);
             var stat = fs.statSync(filePath);
             res.writeHead(200, {
                 'Content-Type': 'application/octet-stream',
-                "Content-Disposition": `attachment; filename="${name}-synNet.txt"`,
+                "Content-Disposition": `attachment; filename="${name}-synNet.csv"`,
                 'Content-Length': stat.size
             });
   
@@ -91,12 +91,12 @@ function makeRequest(dataSlice) {
           ++c;
           if(c > l) {
             console.log('finish', counter);
-            var filePath = path.join(__dirname, `${name}.txt`);
+            var filePath = path.join(__dirname, `${name}.csv`);
             if (fs.existsSync(filePath)){
               var stat = fs.statSync(filePath);
               res.writeHead(200, {
                   'Content-Type': 'application/octet-stream',
-                  "Content-Disposition": `attachment; filename="${name}-synNet.txt"`,
+                  "Content-Disposition": `attachment; filename="${name}-synNet.csv"`,
                   'Content-Length': stat.size
               });
               var readStream = fs.createReadStream(filePath);
