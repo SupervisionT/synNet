@@ -54,6 +54,9 @@ http.createServer(function(req, res) {
     // })
     // const param = req.url.split('?')[1];
     // const msg = param.split('&').reduce((a, e) => (a.concat({[e.split('=')[0]] : decodeURIComponent(e.split('=')[1])})), []);
+  } else if (req.url.split('?')[0] == '/newsletter' && req.method.toLowerCase() == 'get') {
+    console.log('newsletter email', req.url.split('?')[1])
+    res.end();
   }
 
   // show a file upload form

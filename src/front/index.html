@@ -76,9 +76,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     <div class="w3-panel w3-padding-16 w3-black">
         <h2>Join our newsletter.</h2>
         <!-- <p>Join our newsletter.</p> -->
-        <label>E-mail</label>
-        <input class="w3-input w3-border" type="text" placeholder="Your Email address">
-        <button type="button" class="w3-button w3-red w3-margin-top">Subscribe</button>
+        <label id="label">E-mail</label>
+        <input class="w3-input w3-border" id="newsletter" type="text" required placeholder="Your Email address">
+        <button type="button" class="w3-button w3-red w3-margin-top" onclick="newsletter()">Subscribe</button>
     </div>
   </div>
   
@@ -239,6 +239,22 @@ Object.keys(languages).forEach(e => {
   option.innerHTML = e;
   x.add(option);
 })
+
+const newsletter = () => {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // Typical action to be performed when the document is ready:
+        nl.value = '';
+        document.getElementById('label').innerHTML = 'E-mail <a style="color:red">   Thank you!</a>'
+        // let changelable = document.getElementById('label');
+        // changelable.innerHTML = 'Thank you'
+      }
+  };
+  const nl = document.getElementById('newsletter')
+  xhttp.open("GET", `/newsletter?${nl.value}`, true);
+  xhttp.send();
+}
 
 // Tabs
 // function openLink(evt, linkName) {
