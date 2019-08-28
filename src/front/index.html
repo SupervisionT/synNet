@@ -58,11 +58,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
             <h3>Start building your Synonyms dictionary Now:</h3>
             <div class="w3-row-padding" style="margin:0 -16px;">
             <form class="w3-row-padding" action="/upload" enctype="multipart/form-data" method="post">
-                <select class="example w3-select w3-white" name="lang" style="width:100%">
+                <select id="langSelector" class="example w3-select w3-white" name="lang" style="width:100%">
                   <option name="" value="0" selected>Select Language</option>
-                  <option name="en" value="en">English</option>
-                  <option name="ar" value="ar">Arabic</option>
-                  <option name="fr" value="fr">France</option>
                 </select>
                 <p><input type="file" name="upload" accept=".xls,.xlsx,.csv" class="w3-file-upload-button" style="width:100%"></p>
                 <p><input type="submit" value="Submit" class="w3-button w3-red w3-margin-top"></p>
@@ -128,6 +125,120 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 </script>
 
 <script>
+const languages = {
+'Afrikaans' : 'af',
+ 'Albanian' : 'sq',
+ 'Amharic' : 'am',
+ 'Arabic' : 'ar',
+ 'Armenian' : 'hy',
+ 'Azerbaijani' : 'az',
+ 'Basque' : 'eu',
+ 'Belarusian' : 'be',
+ 'Bengali' : 'bn',
+ 'Bosnian' : 'bs',
+ 'Bulgarian' : 'bg',
+ 'Catalan' : 'ca',
+ 'Cebuano' : 'ceb',
+ 'Chinese (Simplified)' : 'zh-CN',
+ 'Chinese (Traditional)' : 'zh-TW',
+ 'Corsican' : 'co',
+ 'Croatian' : 'hr',
+ 'Czech' : 'cs',
+ 'Danish' : 'da',
+ 'Dutch' : 'nl',
+ 'English' : 'en',
+ 'Esperanto' : 'eo',
+ 'Estonian' : 'et',
+ 'Finnish' : 'fi',
+ 'French' : 'fr',
+ 'Frisian' : 'fy',
+ 'Galician' : 'gl',
+ 'Georgian' : 'ka',
+ 'German' : 'de',
+ 'Greek' : 'el',
+ 'Gujarati' : 'gu',
+ 'Haitian Creole' : 'ht',
+ 'Hausa' : 'ha',
+ 'Hawaiian' : 'haw',
+ 'Hebrew' : 'he or iw',
+ 'Hindi' : 'hi',
+ 'Hmong' : 'hmn',
+ 'Hungarian' : 'hu',
+ 'Icelandic' : 'is',
+ 'Igbo' : 'ig',
+ 'Indonesian' : 'id',
+ 'Irish' : 'ga',
+ 'Italian' : 'it',
+ 'Japanese' : 'ja',
+ 'Javanese' : 'jw',
+ 'Kannada' : 'kn',
+ 'Kazakh' : 'kk',
+ 'Khmer' : 'km',
+ 'Korean' : 'ko',
+ 'Kurdish' : 'ku',
+ 'Kyrgyz' : 'ky',
+ 'Lao' : 'lo',
+ 'Latin' : 'la',
+ 'Latvian' : 'lv',
+ 'Lithuanian' : 'lt',
+ 'Luxembourgish' : 'lb',
+ 'Macedonian' : 'mk',
+ 'Malagasy' : 'mg',
+ 'Malay' : 'ms',
+ 'Malayalam' : 'ml',
+ 'Maltese' : 'mt',
+ 'Maori' : 'mi',
+ 'Marathi' : 'mr',
+ 'Mongolian' : 'mn',
+ 'Myanmar (Burmese)' : 'my',
+ 'Nepali' : 'ne',
+ 'Norwegian' : 'no',
+ 'Nyanja (Chichewa)' : 'ny',
+ 'Pashto' : 'ps',
+ 'Persian' : 'fa',
+ 'Polish' : 'pl',
+ 'Portuguese (Portugal, Brazil)' : 'pt',
+ 'Punjabi' : 'pa',
+ 'Romanian' : 'ro',
+ 'Russian' : 'ru',
+ 'Samoan' : 'sm',
+ 'Scots Gaelic' : 'gd',
+ 'Serbian' : 'sr',
+ 'Sesotho' : 'st',
+ 'Shona' : 'sn',
+ 'Sindhi' : 'sd',
+ 'Sinhala (Sinhalese)' : 'si',
+ 'Slovak' : 'sk',
+ 'Slovenian' : 'sl',
+ 'Somali' : 'so',
+ 'Spanish' : 'es',
+ 'Sundanese' : 'su',
+ 'Swahili' : 'sw',
+ 'Swedish' : 'sv',
+ 'Tagalog (Filipino)' : 'tl',
+ 'Tajik' : 'tg',
+ 'Tamil' : 'ta',
+ 'Telugu' : 'te',
+ 'Thai' : 'th',
+ 'Turkish' : 'tr',
+ 'Ukrainian' : 'uk',
+ 'Urdu' : 'ur',
+ 'Uzbek' : 'uz',
+ 'Vietnamese' : 'vi',
+ 'Welsh' : 'cy',
+ 'Xhosa' : 'xh',
+ 'Yiddish' : 'yi',
+ 'Yoruba' : 'yo',
+ 'Zulu' : 'zu'
+}
+
+var x = document.getElementById('langSelector');
+Object.keys(languages).forEach(e => {
+  var option = document.createElement("option");
+  option.value = languages[e];
+  option.innerHTML = e;
+  x.add(option);
+})
 
 // Tabs
 // function openLink(evt, linkName) {
