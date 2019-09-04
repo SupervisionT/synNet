@@ -8,7 +8,7 @@ var http = require('http'),
 
 
 http.createServer(function(req, res) {
-  console.log('req.url:', req.url);
+  console.log('req.url:', req.url, req.method);
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
 
     var form = new multiparty.Form();
@@ -57,12 +57,16 @@ http.createServer(function(req, res) {
   } else if (req.url.split('?')[0] == '/newsletter' && req.method.toLowerCase() == 'get') {
     console.log('newsletter email', req.url.split('?')[1])
     res.end();
-  }
-
+  } else if (req.url == '/robots.txt'){
+    res.writeHead(200, {'content-type': 'text/plain'});
+    var readSream = fs.createReadStream('./robots.txt','utf8')
+    readSream.pipe(res);
+  } else {
   // show a file upload form
   // var html = fs.readFileSync('./src/front/index.html', 'utf8')
   res.writeHead(200, {'content-type': 'text/html'});
   var readSream = fs.createReadStream('./src/front/index.html','utf8')
   readSream.pipe(res);
+  }
 
 }).listen(process.env.PORT || 8080);
