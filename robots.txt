@@ -39,3 +39,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap files
+Sitemap: http://www.synnets.com/sitemap.xml

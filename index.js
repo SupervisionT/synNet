@@ -58,8 +58,12 @@ http.createServer(function(req, res) {
     console.log('newsletter email', req.url.split('?')[1])
     res.end();
   } else if (req.url == '/robots.txt'){
-    res.writeHead(200, {'content-type': 'text/plain'});
+    res.writeHead(200, {'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8', 'content-type': 'text/plain'});
     var readSream = fs.createReadStream('./robots.txt','utf8')
+    readSream.pipe(res);
+  } else if (req.url == '/sitemap.xml'){
+    res.writeHead(200);
+    var readSream = fs.createReadStream('./sitemap.xml','utf8')
     readSream.pipe(res);
   } else {
   // show a file upload form
